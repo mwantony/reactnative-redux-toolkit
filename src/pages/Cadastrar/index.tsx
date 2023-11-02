@@ -3,8 +3,6 @@ import { View, Text, Image, ScrollView, Pressable } from 'react-native';
 import { Button, Card, Checkbox, TextInput, Title } from 'react-native-paper';
 
 import { Genero, Usuario } from 'src/types/usuario';
-import { CadastrarProps } from './types';
-import { cadastrarUsuario } from 'src/services/usuarios';
 
 import banner from 'assets/cadastrar/banner.png';
 import DatePicker from 'src/components/DatePicker';
@@ -12,8 +10,12 @@ import useSnackbar from 'src/contexts/Snackbar';
 
 import styles from './styles';
 import GenderPicker from 'src/components/GenderPicker';
+import { cadastrar } from 'src/store/reducers/usuario';
+import { useDispatch } from 'react-redux';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { RootStackParamList } from 'src/routes';
 
-export default function Cadastrar({ setUsuarioLogado, navigation }: CadastrarProps) {
+export default function Cadastrar({ navigation }: DrawerScreenProps<RootStackParamList, 'Cadastrar'>) {
   const [nome, setNome] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [genero, setGenero] = useState<Genero | undefined>();
@@ -27,6 +29,7 @@ export default function Cadastrar({ setUsuarioLogado, navigation }: CadastrarPro
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [leu, setLeu] = useState(false);
   const { criarMensagem } = useSnackbar();
+  const dispatch = useDispatch();
 
   const handleSubmit = () => {
     if (!leu) return criarMensagem.erro('Você deve concordar com os termos de uso');
@@ -44,8 +47,7 @@ export default function Cadastrar({ setUsuarioLogado, navigation }: CadastrarPro
       senha
     }
 
-    const usuarioCadastrado = cadastrarUsuario(novoUsuario);
-    setUsuarioLogado(usuarioCadastrado);
+    dispatch(cadastrar(novoUsuario));
     criarMensagem.sucesso('Cadastro efetuado com sucesso!');
     navigation.navigate('Home');
   }

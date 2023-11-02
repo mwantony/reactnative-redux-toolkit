@@ -2,10 +2,7 @@ import { useState } from 'react';
 import { Text, View, Image, KeyboardAvoidingView } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
 
-import { LoginProps } from './types';
-
 import useSnackbar from 'src/contexts/Snackbar';
-import { logar as logarService } from 'src/services/usuarios';
 import { logar } from 'src/store/reducers/usuario';
 
 import banner from 'assets/login/banner.png';
@@ -13,8 +10,10 @@ import icon from 'assets/login/icon.png';
 import styles from './styles';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useDispatch } from 'react-redux';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { RootStackParamList } from 'src/routes';
 
-export default function Login({ navigation, setUsuarioLogado }: LoginProps) {
+export default function Login({ navigation }: DrawerScreenProps<RootStackParamList, 'Login'>) {
   const [emailOuCpf, setEmailOuCpf] = useState('');
   const [senha, setSenha] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
